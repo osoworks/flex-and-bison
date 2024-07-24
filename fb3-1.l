@@ -1,24 +1,27 @@
-/* fb3-1.l: Flex lexer for arithmetic expressions */
+/* recognize tokens for the calculator */
 
+%option noyywrap nodefault yylineno
 %{
-#include "fb3-1.tab.h"
-#include "fb3-1.h"
+# include "fb3-1.h"
+# include "fb3-1.tab.h"
 %}
 
-%%
-[0-9]+(\.[0-9]+)?	{ yylval.d = atof(yytext); return NUMBER; }
-"+"			{ return ADD; }
-"-"			{ return SUB; }
-"*"			{ return MUL; }
-"/"			{ return DIV; }
-"|"			{ return ABS; }
-"("			{ return OP; }
-")"			{ return CP; }
-[\t]			{ /* ignore whitespace */ }
-.			{ return *yytext; }
-\n			{ return EOL; }
-%%
+/* float exponent */
+EXP	([Ee][-+]?[0-9]+)
 
-int yywrap() {
-	return 1;
-}
+%%
+"+" |
+"-" |
+"*" |
+"/" |
+"|" |
+"(" |
+")"     { return yytext[0]; }
+[0-9]+"."[0-9]*{EXP}? |
+"."?[0-9]+{EXP}? { yylval.d = atof(yytext); return NUMBER; }
+
+\n      { return EOL; }
+"//".*  
+[ \t]   { /* ignore white space */ }
+.	{ yyerror("Mystery character %c\n", *yytext); }
+%%

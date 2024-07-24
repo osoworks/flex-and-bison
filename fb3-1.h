@@ -1,22 +1,21 @@
-/* Declartions for a calculator fb3_1 */
+/*
+ * Declarations for a calculator fb3-1
+ */
 
-#ifndef FB3_1_H
-#define FB3_1_H
+/* interface to the lexer */
+extern int yylineno; /* from lexer */
+void yyerror(char *s, ...);
 
-/*interface to the lexer */
-extern int yylineo; /*from lexer*/
-void yyerror(const char *s, ...);
-
-/* nodes in the abstract syntax tree */
+/* nodes in the Abstract Syntax Tree */
 struct ast {
-	int nodetype;
-	struct ast *l;
-	struct ast *r;
+  int nodetype;
+  struct ast *l;
+  struct ast *r;
 };
 
 struct numval {
-	int nodetype; /* type K for constant */
-	double number;
+  int nodetype;			/* type K */
+  double number;
 };
 
 /* build an AST */
@@ -29,4 +28,3 @@ double eval(struct ast *);
 /* delete and free an AST */
 void treefree(struct ast *);
 
-#endif
